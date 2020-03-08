@@ -15,6 +15,62 @@ lli minKey(lli key[], bool mstSet[], lli V)
  return min_index; 
 } 
 
+lli primMST(lli graph[V1][V1], lli V) 
+{ 
+ lli min1=0;
+ lli parent[V]; 
+  lli key[V]; 
+ bool mstSet[V]; 
+for (lli i = 0; i < V; i++) 
+ key[i] = INT_MAX, mstSet[i] = false; 
+  key[0] = 0; 
+ parent[0] = -1; 
+ for (lli count = 0; count < V - 1; count++) 
+ { 
+ lli u = minKey(key, mstSet, V); 
+ mstSet[u] = true; 
+for (lli v = 0; v < V; v++) 
+ {
+  if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v]) 
+ parent[v] = u, key[v] = graph[u][v]; 
+ }
+ } 
+ for (lli i = 1; i < V; i++) 
+ min1+=graph[i][parent[i]]; 
+ return min1;
+} 
+
+lli heuristic(lli node,lli visited[],lli graph[][V1])
+{
+ visited[node]=1;
+ vector<lli>mst;
+ lli min1=100000,min2=100000; 
+ mst.push_back(node); 
+ lli i,j,heuristic=0;
+ for(i=1;i<=V1;i++)
+ { 
+ if(visited[i]==0)
+ {
+  mst.push_back(i);
+ if(graph[node-1][i-1]<min1)
+ min1=graph[node-1][i-1];
+ if(graph[i-1][start-1]<min2)
+ min2=graph[i-1][start-1];
+ }
+ } 
+ if(mst.size()>1) 
+ heuristic+=min1+min2;
+ lli graph1[V1][V1]={0};
+ for(i=0;i<mst.size();i++)
+ {
+  for(j=0;j<mst.size();j++)
+ graph1[i][j]=graph[mst[i]-1][mst[j]-1];
+ } 
+ lli hmst = primMST(graph1,mst.size());
+ heuristic+=hmst;
+ return heuristic; 
+}
+
 void traversal(lli node,lli cost,lli visited[],vector<lli>path,lli graph[][V1])
 { 
 lli mx=0;
@@ -71,62 +127,6 @@ lli mx=0;
  return;
  }
 } 
-
-lli primMST(lli graph[V1][V1], lli V) 
-{ 
- lli min1=0;
- lli parent[V]; 
-  lli key[V]; 
- bool mstSet[V]; 
-for (lli i = 0; i < V; i++) 
- key[i] = INT_MAX, mstSet[i] = false; 
-  key[0] = 0; 
- parent[0] = -1; 
- for (lli count = 0; count < V - 1; count++) 
- { 
- lli u = minKey(key, mstSet, V); 
- mstSet[u] = true; 
-for (lli v = 0; v < V; v++) 
- {
-  if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v]) 
- parent[v] = u, key[v] = graph[u][v]; 
- }
- } 
- for (lli i = 1; i < V; i++) 
- min1+=graph[i][parent[i]]; 
- return min1;
-} 
-
-lli heuristic(lli node,lli visited[],lli graph[][V1])
-{
- visited[node]=1;
- vector<lli>mst;
- lli min1=100000,min2=100000; 
- mst.push_back(node); 
- lli i,j,heuristic=0;
- for(i=1;i<=V1;i++)
- { 
- if(visited[i]==0)
- {
-  mst.push_back(i);
- if(graph[node-1][i-1]<min1)
- min1=graph[node-1][i-1];
- if(graph[i-1][start-1]<min2)
- min2=graph[i-1][start-1];
- }
- } 
- if(mst.size()>1) 
- heuristic+=min1+min2;
- lli graph1[V1][V1]={0};
- for(i=0;i<mst.size();i++)
- {
-  for(j=0;j<mst.size();j++)
- graph1[i][j]=graph[mst[i]-1][mst[j]-1];
- } 
- lli hmst = primMST(graph1,mst.size());
- heuristic+=hmst;
- return heuristic; 
-}
 
 int main()
 { 
