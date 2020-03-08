@@ -36,16 +36,6 @@ void ucstraversal(vector<chessboard>&V1)
 temp.cb[queens][i]=1;
      temp.queens++;
 temp.path_cost++;
-if(queens==0 || (cond1==0 && cond2==0 && cond3==0) )
-        {        
-          temp.col[i]=temp.diag1[queens-i+7]=temp.diag2[queens+i]=1;
-          V1.push_back(temp);
-          cost++;
-          temp.col[i]=temp.diag1[queens-i+7]=temp.diag2[queens+i]=0;
-        }
-       temp.cb[queens][i]=0;
-   temp.queens--;
-temp.path_cost--;
     }
 }    
 
@@ -55,10 +45,6 @@ int main()
   long long int i,j;
   chessboard c1;
    for(i=0;i<8;i++)
-  { 
-    for(j=0;j<8;j++)
-    c1.cb[i][j]=0;
-  }
   c1.pc=0;
   c1.queens=0;
   for(i=0;i<20;i++)
