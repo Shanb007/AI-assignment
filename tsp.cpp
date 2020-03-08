@@ -64,67 +64,30 @@ class TSP
 		}
 };
 
-int distance(int city1,int city2)
-{
-	return originalGraph[city1][city2];
-}
-
-int buildMinimumSpanningTree2(vector<int> vertices,vector<char> nodesLeft)
-{
-	/*This function returns the length of the minimumSpanningTree for the
-	  remaining unvisited Cities.
-	  */
-	int size=vertices.size();
-	if(size==1)
-	{
-		return 0;
-	}
-
-
-	int pcity[40],pdist[40],minDistance=INT_MAX;
-	vector<int>::iterator it1;
-	vector<char>::iterator it2;
-	int i=0;
-	string cities;
-	sort(nodesLeft.begin(),nodesLeft.end());
-	for(it1=vertices.begin(),it2=nodesLeft.begin();it1!=vertices.end(),it2!=nodesLeft.end();it1++,it2++)
-	{
-		pcity[i]=*it1; //parent city
-		pdist[i]=INT_MAX; //parent distance;
-		i++;
-		cities+=*it2;
-	}
-
-	unordered_map<string,int>:: iterator mit;//iterator for the hash map for the MST
-	//So that we don't have to calculate the MST length again and again for each path.
-	mit=mstMap.find(cities);
-	if(mit!=mstMap.end())
-	{
-		return mit->second;
-	}
-
-	int newCity=pcity[size-1];//i.e we are making the last city as the newCity for finding the MST
-	int thisDistance;
-	int length=0,minIndex;
-	for(int m=size-1;m>0;m--)
-	{
-		minDistance=INT_MAX;
-		for(int j=0;j<m;j++)
-		{
-			thisDistance=distance(pcity[j],newCity);
-
-			if(thisDistance < pdist[j]) pdist[j]=thisDistance;
-			if(pdist[j]<minDistance) minDistance=pdist[j],minIndex=j;
-		}
-		newCity=pcity[minIndex];
-		length+=minDistance;
-		pcity[minIndex]=pcity[m-1];
-		pdist[minIndex]=pdist[m-1];  
-	}
-	mstMap[cities]=length;
-	return length;
-
-}
+lli primMST(lli graph[V1][V1], lli V) 
+{ 
+ lli min1=0;
+ lli parent[V]; 
+  lli key[V]; 
+ bool mstSet[V]; 
+for (lli i = 0; i < V; i++) 
+ key[i] = INT_MAX, mstSet[i] = false; 
+  key[0] = 0; 
+ parent[0] = -1; 
+ for (lli count = 0; count < V - 1; count++) 
+ { 
+ lli u = minKey(key, mstSet, V); 
+ mstSet[u] = true; 
+for (lli v = 0; v < V; v++) 
+ {
+  if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v]) 
+ parent[v] = u, key[v] = graph[u][v]; 
+ }
+ } 
+ for (lli i = 1; i < V; i++) 
+ min1+=graph[i][parent[i]]; 
+ return min1;
+} 
 
 int calculateHeuristic(vector<int> vertices,vector<char> nodesLeft,int currentCityForExpansion)
 {
