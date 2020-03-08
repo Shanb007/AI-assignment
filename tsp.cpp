@@ -89,57 +89,37 @@ for (lli v = 0; v < V; v++)
  return min1;
 } 
 
-int calculateHeuristic(vector<int> vertices,vector<char> nodesLeft,int currentCityForExpansion)
+lli heuristic(lli node,lli visited[],lli graph[][V1])
 {
-
-	/*This function calculates the Heuristic value for the remaining path from the current city to the remaining unvisited cities to the source city.*/
-	int size=vertices.size();
-
-	if(size==1)
-	{
-		vector<int>:: iterator itt=vertices.begin();
-
-		return distance(currentCityForExpansion,*itt)+ distance(*itt,0);
-	}
-	if(size==0)
-	{
-
-		return distance(currentCityForExpansion,0);
-	}
-
-	int pcity[40],pdist[40],minDistance=INT_MAX;
-	vector<int>::iterator it1;
-	//vector<char>::iterator it2;
-	int i=0;
-	string cities;
-
-	for(it1=vertices.begin();it1!=vertices.end();it1++)
-	{
-		pcity[i]=*it1; //parent city
-		pdist[i]=INT_MAX; //parent distance;
-		i++;
-
-	}
-	int mst;
-
-	mst=buildMinimumSpanningTree2(vertices,nodesLeft);
-
-	int nearestUnvisitedCityDistance=INT_MAX,nearestToSource=INT_MAX,thisDistance1,thisDistance2;
-
-	for(i=0;i<size;i++)
-	{
-
-		thisDistance1=distance(pcity[i],currentCityForExpansion);// this is the distancefrom the unvisited city to the currentCityForExpansion
-		thisDistance2=distance(pcity[i],0); //this is the distance from the source
-		if(thisDistance1<nearestUnvisitedCityDistance) nearestUnvisitedCityDistance=thisDistance1;
-
-		if(thisDistance2<nearestToSource) nearestToSource=thisDistance2;
-
-	}
-	int hn=mst+nearestToSource+nearestUnvisitedCityDistance;
-	return hn;
+ visited[node]=1;
+ vector<lli>mst;
+ lli min1=100000,min2=100000; 
+ mst.push_back(node); 
+ lli i,j,heuristic=0;
+ for(i=1;i<=V1;i++)
+ { 
+ if(visited[i]==0)
+ {
+  mst.push_back(i);
+ if(graph[node-1][i-1]<min1)
+ min1=graph[node-1][i-1];
+ if(graph[i-1][start-1]<min2)
+ min2=graph[i-1][start-1];
+ }
+ } 
+ if(mst.size()>1) 
+ heuristic+=min1+min2;
+ lli graph1[V1][V1]={0};
+ 
+ for(i=0;i<mst.size();i++)
+ {
+  for(j=0;j<mst.size();j++)
+ graph1[i][j]=graph[mst[i]-1][mst[j]-1];
+ } 
+ lli hmst = primMST(graph1,mst.size());
+ heuristic+=hmst;
+ return heuristic; 
 }
-
 
 
 int optimumCost=INT_MAX;
