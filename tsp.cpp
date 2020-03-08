@@ -15,54 +15,62 @@ lli minKey(lli key[], bool mstSet[], lli V)
  return min_index; 
 } 
 
-class TSP
-{
-	/*This Class defines the Basic functions for the TSP Problem, like taking the Input and calculating the distance matrix for the cities*/
-	public:
-
-		char node[3];
-		int points[40][2],numCities;
-		//TSP(int i,int j) : x(i),y(j){}
-
-		void inputData()
-		{
-
-			scanf("%d",&numCities);
-			int i=0;
-			getc_unlocked(stdin);
-			//double distance
-			while(i<numCities)
-			{
-				scanf("%s%d%d ",node,&points[i][0],&points[i][1]);
-				i++;
-			}
-
-		}
-
-		int CalculateDistance(int x1,int y1,int x2,int y2)
-		{
-			return int(sqrt(pow(x1-x2,2)+pow(y1-y2,2)) + 0.5 );
-		}
-		void createOriginalDistanceGraph()
-		{
-			int i,j;
-			for(i=0;i<numCities;i++)
-			{
-				originalGraph[i][i]=0;
-				adjacencyMatrixForMinimumSpanningTree[i][i]=0;
-				for(j=i+1;j<numCities;j++)
-				{
-					originalGraph[i][j]=CalculateDistance(points[i][0],points[i][1],points[j][0],points[j][1]);
-					originalGraph[j][i]=originalGraph[i][j];
-					// This is a Symmetric TSP
-					adjacencyMatrixForMinimumSpanningTree[i][j]=0;
-					adjacencyMatrixForMinimumSpanningTree[j][i]=0;
-					minimumSpanningTree[i][j]=INT_MAX;
-					minimumSpanningTree[j][i]=INT_MAX;
-				}
-			}
-		}
-};
+void traversal(lli node,lli cost,lli visited[],vector<lli>path,lli graph[][V1])
+{ 
+lli mx=0;
+ for(lli i=1;i<=V1;i++)
+ {
+  if(visited[i]>=mx)
+ mx=visited[i];
+ }
+ visited[node]=mx+1;
+ path.push_back(node); 
+ lli z=0; 
+ lli visited1[V1+1][V1+1]={0};
+ lli visited2[V1+1][V1+1]={0}; 
+ vector<lli>path1[V1+1]; 
+ for(lli i=1;i<=V1;i++)
+ { 
+ if(visited[i]==0)
+ { 
+ for(lli j=1;j<=V1;j++)
+ {visited1[i][j]=visited[j];
+ if(visited[j]>=1)
+ visited2[i][j]=1;
+ else
+ visited2[i][j]=0; 
+ if(visited[j]>=1)
+ path1[i].push_back(j);
+ }
+ lli heur=heuristic(i,visited2[i],graph);
+ lli obj=heur+graph[node-1][i-1]+cost; 
+ p1.push({obj,{i,{node,{visited1[i],{cost,path1[i]} } }}}); 
+ z=z+1;
+ }
+ }
+ if(z>=1) 
+ {
+ pair<lli,pair<lli,pair<lli,pair<lli*,pair<lli,vector<lli>>>>>> p2=p1.top();
+ p1.pop();
+ cost=p2.second.second.second.second.first + graph[p2.second.second.first-1][p2.second.first-1];
+ lli* vis= p2.second.second.second.first;
+ traversal(p2.second.first,cost,p2.second.second.second.first,p2.second.second.second.second.second,graph); 
+ }
+ else
+ { 
+ vector<pair<lli,lli>>finalpath;
+ cout<<"Path: "; 
+ for(lli i=1;i<=V1;i++)
+ finalpath.push_back({visited[i],i});
+ sort(finalpath.begin(),finalpath.end());
+ for(lli i=0;i<finalpath.size();i++)
+ cout<<finalpath[i].second<<" ";
+ cout<<"1 "; 
+ cout<<"\n";
+  cout<<"Cost: "<<cost+graph[node-1][start-1];
+ return;
+ }
+} 
 
 lli primMST(lli graph[V1][V1], lli V) 
 { 
@@ -110,7 +118,6 @@ lli heuristic(lli node,lli visited[],lli graph[][V1])
  if(mst.size()>1) 
  heuristic+=min1+min2;
  lli graph1[V1][V1]={0};
- 
  for(i=0;i<mst.size();i++)
  {
   for(j=0;j<mst.size();j++)
@@ -119,137 +126,6 @@ lli heuristic(lli node,lli visited[],lli graph[][V1])
  lli hmst = primMST(graph1,mst.size());
  heuristic+=hmst;
  return heuristic; 
-}
-
-
-int optimumCost=INT_MAX;
-
-Node createNode(int citynum,string pathSoFar,int citiesNotVisited,char name,int hCost,int aCost,int totalCost,string state,vector<int> citiesLeft)
-{
-	/*This function Creates a new City to be explored*/
-	Node temp( citynum, pathSoFar, citiesNotVisited, name, hCost,aCost,totalCost,state, citiesLeft);
-	return temp;
-}
-
-int numExpanded=1,totalNumofNodes=1;
-string startSearch()
-{
-	/*This is the main ASTAR Search Function where the nodes are generated and put on the Priority Queue*/
-	Node current;
-	int hn,tCost,aCost;
-	char name;
-	vector<int> vertices;
-	vector<int>::iterator it,it3;
-	vector<int> nextUnvisitedCities;
-	vector<char> namesOfCitiesYettoVisit,namesOfCitiesYettoVisit2;
-	vector<char>::iterator it2;
-	string pathSoFar,state,npathSoFar,nstate;
-	string res;
-	while(!astar.empty() and astar.top().totalCost < optimumCost)
-	{
-		current=astar.top();
-		astar.pop();
-
-		pathSoFar=current.pathSoFar;
-		state=current.state;
-
-
-		vertices=current.citiesLeft;
-		for(it=vertices.begin();it!=vertices.end();it++)
-		{
-			int next=*it;
-
-		}
-
-		if(current.citiesNotVisited==0)
-		{
-
-			int tcost=current.actualCost + distance(current.citynum,0);
-
-			if(tcost< optimumCost )
-			{
-				optimumCost=tcost;
-				res=current.pathSoFar;
-
-			}
-
-			continue;
-		}
-		if(closedList.find(state)!=closedList.end() and closedList[state] < current.totalCost)
-		{
-
-			continue;
-		}
-		if(closedList.find(state)!=closedList.end() and closedList[state] > current.totalCost)
-		{
-
-			closedList[state]=current.totalCost;
-		}
-		else if(closedList.find(state)==closedList.end())
-		{
-			closedList[state]=current.totalCost;
-		}
-		numExpanded++;
-		for(it=vertices.begin();it!=vertices.end();it++)
-		{
-			int next=*it;
-			nextUnvisitedCities.clear();
-			namesOfCitiesYettoVisit.clear();
-			vector<int>:: iterator it4;
-
-			for(it3=vertices.begin();it3!=vertices.end();it3++)
-			{
-				int x=*it3;
-
-				if(x==next)
-				{
-					continue;
-				}
-
-				nextUnvisitedCities.push_back(x);
-			}
-
-			for(it4=vertices.begin();it4!=vertices.end();it4++)
-			{
-				int city3=*it4;
-				if(city3==next) continue;
-				if( city3>25)
-				{
-					namesOfCitiesYettoVisit.push_back('a'+ city3-26);
-				}
-				else
-				{
-					namesOfCitiesYettoVisit.push_back('A'+city3);
-				}
-			}
-			hn=calculateHeuristic(nextUnvisitedCities,namesOfCitiesYettoVisit,next);
-
-			aCost=current.actualCost + distance(current.citynum,next);
-			tCost=hn+ aCost;
-
-			if( next>25)
-			{
-				name='a'+ next-26;
-			}
-			else
-			{
-				name='A'+next;
-			}
-			npathSoFar=pathSoFar+name;
-
-			string temps=npathSoFar;
-			sort(temps.begin(),temps.end());
-			nstate=temps+name;
-
-
-			totalNumofNodes++;
-			astar.push(createNode(next,npathSoFar,current.citiesNotVisited-1,name,hn,aCost,tCost,nstate,nextUnvisitedCities));
-
-
-		}
-
-	}
-	return res;
 }
 
 int main()
@@ -278,4 +154,3 @@ lli visited[V1+1]={0};
  traversal(start,0,visited,path,graph);
  return 0; 
  }
-
