@@ -1,109 +1,70 @@
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.*;
-import java.util.LinkedList; 
-import java.util.Queue; 
-class UCS 
+#include<bits/stdc++.h>
+using namespace std;
+
+long long int cost=0,a=0;
+
+struct chessboard
 {
-	static class Node
-	{
+long long int cb[8][8],path_cost,queens;
+    long long int col[20],diag1[20],diag2[20];
+};
 
-		int c[][]=new int[8][8];
-		int cost=0,ecost;
-		int col,row;
-		Node next[]=new Node[8];
-		Node(int i,int j)
-		{
-			row=i;
-			col=j;
-		}
+vector<chessboard>V1;
+void ucstraversal(vector<chessboard>&V1)
+{
+    chessboard temp=V1[0];
+    long long int queens=temp.queens;
+    V1.erase(V1.begin());
+    if(queens==8)
+    {
+      a++;
+      cout<<a<<")Solution\n";
+      cout<<"Cost= "<<cost<<"\n";
+      for(long long int i=0;i<8;i++)
+        { 
+          for(long long int j=0;j<8;j++)
+          cout<<temp.cb[i][j]<<" ";
+          cout<<"\n";
+        }
+        cout<<"\n";    
+    }
+    for(long long int i=0;i<8;i++)
+    {
+        long long int cond1=temp.col[i];
+        long long int cond2=temp.diag1[queens-i+7];
+        long long int cond3=temp.diag2[queens+i];       
+temp.cb[queens][i]=1;
+     temp.queens++;
+temp.path_cost++;
+if(queens==0 || (cond1==0 && cond2==0 && cond3==0) )
+        {        
+          temp.col[i]=temp.diag1[queens-i+7]=temp.diag2[queens+i]=1;
+          V1.push_back(temp);
+          cost++;
+          temp.col[i]=temp.diag1[queens-i+7]=temp.diag2[queens+i]=0;
+        }
+       temp.cb[queens][i]=0;
+   temp.queens--;
+temp.path_cost--;
+    }
+}    
 
-	}
 
-	Comparator<Node>costComparator = new Comparator<Node>()
-       	{
-		public int  compare(Node s1, Node s2)
-	       	{
-			if(s1.cost==s2.cost)
-				return 0;
-			else if(s2.cost>s1.cost)
-				return 1;
-			else
-				return -1;
-
-		}
-	};
-	PriorityQueue<Node> queue = new PriorityQueue<>(costComparator);
-	//Queue<Node> queue = new LinkedList<>(); 
-
-	public static void main(String[]args)
-	{
-		Node ob1=new Node(0,0);
-		UCS ob=new UCS();
-		Node f=ob.findsol(0,ob1);
-		for(int i=0;i<8;i++)
-		{
-			for(int j=0;j<8;j++)
-			{
-				System.out.print(f.c[i][j]+" ");
-			}
-			System.out.println();
-		}
-		System.out.print(f.cost);
-	}
-	Node findsol(int i,Node ob)
-	{
-
-		for(int j=0;j<8&&i<8;j++)
-		{
-
-			Node ob1=new Node (i,j);
-			ob.next[j]=ob1;
-			for(int i1=0;i1<8;i1++)
-			{
-				for(int j1=0;j1<8;j1++)
-				{
-					ob1.c[i1][j1]=ob.c[i1][j1];
-				}
-			}
-			ob1.c[i][j]=1;
-			boolean b=check(ob1);
-			if(b==true)
-			{                      
-				ob1.cost=ob.cost+1;
-
-				queue.add(ob1);
-			}
-			else 
-			{
-				ob1=null;
-			}
-		}
-
-		Node ob2=ob,ob1=null;
-		if(queue.size()>0&&ob.row<7)
-		{
-			ob1=queue.poll();
-			ob2=findsol(ob1.row+1,ob1);
-		}
-		return ob2;
-	}
-	boolean check(Node ob)
-	{
-		int c=0;
-		for(int i=0;i<ob.row;i++)
-		{
-			for(int j=0;j<=7;j++)
-			{
-				if(ob.c[i][j]==1)
-				{
-					if((ob.row-i)==(ob.col-j)||(ob.col==j)||(ob.row-i)==(j-ob.col))
-					{
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
+int main()
+{ 
+  long long int i,j;
+  chessboard c1;
+   for(i=0;i<8;i++)
+  { 
+    for(j=0;j<8;j++)
+    c1.cb[i][j]=0;
+  }
+  c1.pc=0;
+  c1.queens=0;
+  for(i=0;i<20;i++)
+    c1.col[i]=c1.diag1[i]=c1.diag2[i]=0;    
+  V1.push_back(c1);
+  while(V1.size()!=0)
+  ucstraversal(V1);
+  return 0;
 }
