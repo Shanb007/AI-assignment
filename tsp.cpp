@@ -6,30 +6,15 @@ using namespace std;
 lli start;
 priority_queue< pair<lli,pair<lli,pair<lli,pair<lli*,pair<lli,vector<lli>>>>>>, vector<pair<lli,pair<lli,pair<lli,pair<lli*,pair<lli,vector<lli>>>>>>>, greater<pair<lli,pair<lli,pair<lli,pair<lli*,pair<lli,vector<lli>>>>>>> >p1;
 
+lli minKey(lli key[], bool mstSet[], lli V) 
+{ 
+ lli min = INT_MAX, min_index; 
+ for (lli v = 0; v < V; v++) 
+ if (mstSet[v] == false && key[v] < min) 
+ min = key[v], min_index = v; 
+ return min_index; 
+} 
 
-class Node
-{
-	/*This class defines the State of the problem. It also defines how the Cities will
-	  be stored in the priority_queue*/
-	public:
-		int citynum,citiesNotVisited;
-		string pathSoFar;
-		char name;
-		int hCost, actualCost, totalCost;
-		string state;// the state contains the sorted version of pathsofar+ the last city visited
-		vector<int> citiesLeft;
-		bool operator <(Node  other) const
-		{
-			return  this->totalCost > other.totalCost;
-		}
-
-		Node(){};
-		Node(int citynum,string pathSoFar,int citiesNV,char name,int hCost,int actualCost,int totalCost,string state,vector<int> citiesLeft):citynum(citynum),pathSoFar(pathSoFar),citiesNotVisited(citiesNotVisited),name(name),hCost(hCost),actualCost(actualCost),totalCost(totalCost),state(state),citiesLeft(citiesLeft){}    
-
-}City[50000];
-int nodeTrack=0;
-
-priority_queue<Node> astar;
 class TSP
 {
 	/*This Class defines the Basic functions for the TSP Problem, like taking the Input and calculating the distance matrix for the cities*/
