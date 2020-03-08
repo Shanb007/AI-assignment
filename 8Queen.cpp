@@ -54,7 +54,12 @@ int main()
 { 
   long long int i,j;
   chessboard c1;
-  c1.pc=0;
+   for(i=0;i<8;i++)
+  { 
+    for(j=0;j<8;j++)
+    c1.cb[i][j]=0;
+  }
+  c1.path_cost=0;
   c1.queens=0;
   for(i=0;i<20;i++)
     c1.col[i]=c1.diag1[i]=c1.diag2[i]=0;    
