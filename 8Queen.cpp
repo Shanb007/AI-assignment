@@ -54,7 +54,6 @@ int main()
 { 
   long long int i,j;
   chessboard c1;
-   for(i=0;i<8;i++)
   c1.pc=0;
   c1.queens=0;
   for(i=0;i<20;i++)
