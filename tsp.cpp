@@ -1,12 +1,11 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
+#define lli long long int
+#define V1 15
 
-int originalGraph[100][100],minimumSpanningTree[100][100],adjacencyMatrixForMinimumSpanningTree[100][100];
-bool visited[40];
-int parentsMinimumSpanningTree[100],  verticesMinimumSpanningTree[100];
-unordered_map<string,int>mstMap;//path, cost for that particular mst
-unordered_map<string,int>closedList; // this is our closed List which we have kept to keep track of nodes that have been extended , and can be used to prune away the paths. full state and cost for that
-//Each time we update the vertices , we update their parents too-> Not that for the
+lli start;
+priority_queue< pair<lli,pair<lli,pair<lli,pair<lli*,pair<lli,vector<lli>>>>>>, vector<pair<lli,pair<lli,pair<lli,pair<lli*,pair<lli,vector<lli>>>>>>>, greater<pair<lli,pair<lli,pair<lli,pair<lli*,pair<lli,vector<lli>>>>>>> >p1;
+
 
 class Node
 {
